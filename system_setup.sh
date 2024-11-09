@@ -13,7 +13,6 @@ apps=(
 "wofi"
 "hyprland"
 "hyprlock"
-"oogaboogaboo"
 "hyprcursor"
 "hyprpaper"
 "waybar"
