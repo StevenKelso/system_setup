@@ -49,7 +49,7 @@ fi
 case "$pm" in
     "apt")
         sudo apt update
-        sudo apt upgrade
+        sudo apt upgrade -y
         for i in "${apps[@]}"; do
             echo -e "\nAttempting to install $i ..."
             sudo apt install $i -y
@@ -79,7 +79,8 @@ case "$pm" in
         done
         ;;
     "zypper")
-        sudo zypper update -y
+        sudo zypper refresh
+        sudo zypper dup
         for i in "${apps[@]}"; do
             echo -e "\nAttempting to install $i ..."
             sudo zypper install $i -y
