@@ -5,7 +5,7 @@ apps=(
 "git"
 "stow"
 "firefox"
-"keepass-xc"
+"keepassxc"
 "kitty"
 "neovim"
 "tmux"
@@ -83,7 +83,7 @@ case "$pm" in
         sudo zypper dup
         for i in "${apps[@]}"; do
             echo -e "\nAttempting to install $i ..."
-            sudo zypper install $i -y
+            sudo zypper install -y $i
             if [ $? -ne 0 ]; then
                 failed=("${failed[@]}" "$i")
             fi
@@ -100,6 +100,15 @@ case "$pm" in
         done
         ;;
 esac
+
+# ---- install starship prompt ----
+curl -sS https://starship.rs/install.sh | sh
+
+# ---- install nerdfont ----
+cd $HOME/Downloads
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraMono.zip
+unzip FiraMono.zip
+mv FiraMonoNerdFont-Regular.otf ~/.local/share/fonts
 
 # ---- display list of failed installs ----
 echo -e "\nThe following programs were unable to be installed:"
