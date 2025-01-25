@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# ---- list of packages to be installed ----
+# list of packages to be installed
 apps=(
 "git"
 "stow"
@@ -18,56 +18,19 @@ apps=(
 "waybar"
 "go"
 "python3"
-"luarocks"
 "eza"
-"bat"
 "fzf"
 "ripgrep"
 )
 
-# ---- list of packages that failed to install ----
+# list of packages that failed to install
 failed=()
 
-# ---- determine package manager ----
-pm=""
+# determine package manager
+read -rp "What is your package manager? (pacman/zypper/xbps) " pm
 
-if command -v apt >/dev/null; then
-    pm="apt"
-elif command -v dnf >/dev/null; then
-    pm="dnf"
-elif command -v pacman >/dev/null; then
-    pm="pacman"
-elif command -v zypper >/dev/null; then
-    pm="zypper"
-elif command -v xbps >/dev/null; then
-    pm="xbps"
-else
-    echo "ERROR: Can't determine package manager"
-fi
-
-# ---- update repo and install packages ----
+# update repo and install packages
 case "$pm" in
-    "apt")
-        sudo apt update
-        sudo apt upgrade -y
-        for i in "${apps[@]}"; do
-            echo -e "\nAttempting to install $i ..."
-            sudo apt install $i -y
-            if [ $? -ne 0 ]; then
-                failed=("${failed[@]}" "$i")
-            fi
-        done
-        ;;
-    "dnf")
-        sudo dnf upgrade -y
-        for i in "${apps[@]}"; do
-            echo -e "\nAttempting to install $i ..."
-            sudo dnf install $i -y
-            if [ $? -ne 0 ]; then
-                failed=("${failed[@]}" "$i")
-            fi
-        done
-        ;;
     "pacman")
         sudo pacman -Syu
         for i in "${apps[@]}"; do
@@ -99,27 +62,40 @@ case "$pm" in
             fi
         done
         ;;
+    *)
+        echo "Not a valid package manager"
 esac
 
-# ---- install starship prompt ----
-curl -sS https://starship.rs/install.sh | sh
-
-# ---- install nerdfont ----
-cd $HOME/Downloads
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraMono.zip
-unzip FiraMono.zip
-mv FiraMonoNerdFont-Regular.otf ~/.local/share/fonts
-
-# ---- display list of failed installs ----
-echo -e "\nThe following programs were unable to be installed:"
+# display list of failed installs
+echo -e "\nThese programs couldn't be installed through the package manager:"
 for i in "${failed[@]}"; do
     echo -e "$i"
 done
 
-# ---- optionally clone dotfiles repo and set them up ----
+# install starship prompt
+echo ""
+read -rp "Do you want to install the starship prompt? [y/n]: " answer
+if [[ "$answer" =~ ^[Yy]$ ]]; then
+    curl -sS https://starship.rs/install.sh | sh
+else
+    echo "Skipping starship prompt"
+fi
+
+# install nerdfont
+echo ""
+read -rp "Do you want to install a nerdfont? [y/n]: " answer
+if [[ "$answer" =~ ^[Yy]$ ]]; then
+    cd $HOME/Downloads
+    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraMono.zip
+    unzip FiraMono.zip
+    mv FiraMonoNerdFont-Regular.otf ~/.local/share/fonts
+else
+    echo "Skipping nerdfont"
+fi
+
+# optionally clone dotfiles repo and set them up
 echo ""
 read -rp "Do you want to clone your dotfiles repo? [y/n]: " answer
-
 if [[ "$answer" =~ ^[Yy]$ ]]; then
     echo -e "\nContinuing..."
     cd $HOME
@@ -127,5 +103,5 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
     cd dotfiles
     stow .
 else
-    echo -e "\nOperation canceled."
+    echo "Skipping dotfiles"
 fi
