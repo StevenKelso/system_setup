@@ -63,7 +63,7 @@ case "$pm" in
         done
         ;;
     *)
-        echo "Not a valid package manager"
+        echo "Skipping package installation"
 esac
 
 # display list of failed installs
@@ -93,12 +93,13 @@ else
     echo "Skipping nerdfont"
 fi
 
-# optionally clone dotfiles repo and set them up
+# clone dotfiles repo and set them up
 echo ""
 read -rp "Do you want to clone your dotfiles repo? [y/n]: " answer
 if [[ "$answer" =~ ^[Yy]$ ]]; then
     echo -e "\nContinuing..."
     cd $HOME
+    rm $HOME/.bashrc
     git clone https://github.com/StevenKelso/dotfiles
     cd dotfiles
     stow .
