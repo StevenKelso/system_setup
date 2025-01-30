@@ -15,7 +15,7 @@ opensuse_apps=(
 "neovim"
 "tmux"
 "ranger"
-"wofi"
+"rofi-wayland"
 "hyprland"
 "hyprlock"
 "hyprcursor"
