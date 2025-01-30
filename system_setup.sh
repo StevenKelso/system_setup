@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# list of packages to be installed
-apps=(
+# list of arch packages
+arch_apps=(
+    # list here
+)
+
+# list of opensuse packages
+opensuse_apps=(
 "git"
 "stow"
 "firefox"
@@ -23,6 +28,11 @@ apps=(
 "ripgrep"
 )
 
+# list of void packages
+void_apps=(
+    #list here
+)
+
 # list of packages that failed to install
 failed=()
 
@@ -33,7 +43,7 @@ read -rp "What is your package manager? (pacman/zypper/xbps) " pm
 case "$pm" in
     "pacman")
         sudo pacman -Syu
-        for i in "${apps[@]}"; do
+        for i in "${arch_apps[@]}"; do
             echo -e "\nAttempting to install $i ..."
             sudo pacman -S $i -y
             if [ $? -ne 0 ]; then
@@ -44,7 +54,7 @@ case "$pm" in
     "zypper")
         sudo zypper refresh
         sudo zypper dup
-        for i in "${apps[@]}"; do
+        for i in "${opensuse_apps[@]}"; do
             echo -e "\nAttempting to install $i ..."
             sudo zypper install -y $i
             if [ $? -ne 0 ]; then
@@ -54,7 +64,7 @@ case "$pm" in
         ;;
     "xbps")
         sudo xbps-install -Su
-        for i in "${apps[@]}"; do
+        for i in "${void_apps[@]}"; do
             echo -e "\nAttempting to install $i ..."
             sudo xbps-install -S $i -y
             if [ $? -ne 0 ]; then
