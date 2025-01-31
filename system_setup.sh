@@ -26,6 +26,7 @@ opensuse_apps=(
 "eza"
 "fzf"
 "ripgrep"
+"make"
 )
 
 # list of void packages
