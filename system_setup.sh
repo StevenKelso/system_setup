@@ -97,7 +97,7 @@ echo ""
 read -rp "Do you want to install a nerdfont? [y/n]: " answer
 if [[ "$answer" =~ ^[Yy]$ ]]; then
     cd $HOME/Downloads
-    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraMono.zip
+    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/FiraMono.zip
     unzip FiraMono.zip
     mv FiraMonoNerdFont-Regular.otf ~/.local/share/fonts
 else
