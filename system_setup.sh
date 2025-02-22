@@ -118,3 +118,7 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
 else
     echo "Skipping dotfiles"
 fi
+
+# create workspace directory
+cd $HOME
+mkdir -p workspace/github.com/stevenkelso/
