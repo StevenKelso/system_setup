@@ -27,6 +27,7 @@ opensuse_apps=(
 "fzf"
 "ripgrep"
 "make"
+"mozilla-openh264"
 )
 
 # list of void packages
