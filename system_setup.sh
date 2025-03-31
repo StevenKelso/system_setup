@@ -21,6 +21,7 @@ arch_apps=(
     "make"
     "btop"
     "unzip"
+    "lazygit"
 )
 
 # list of void packages
@@ -40,7 +41,7 @@ case "$pm" in
         sudo pacman -Syu
         for i in "${arch_apps[@]}"; do
             echo -e "\nattempting to install $i ..."
-            sudo pacman -S $i -y
+            sudo pacman -S --noconfirm $i
             if [ $? -ne 0 ]; then
                 failed=("${failed[@]}" "$i")
             fi
