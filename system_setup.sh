@@ -20,6 +20,7 @@ arch_apps=(
     "ripgrep"
     "make"
     "btop"
+    "unzip"
 )
 
 # list of void packages
