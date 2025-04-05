@@ -22,6 +22,8 @@ arch_apps=(
     "btop"
     "unzip"
     "lazygit"
+    "man-db"
+    "man-pages"
 )
 
 # list of void packages
@@ -29,11 +31,35 @@ void_apps=(
     #list here
 )
 
+opensuse_apps=(
+"git"
+"stow"
+"firefox"
+"keepassxc"
+"kitty"
+"neovim"
+"tmux"
+"ranger"
+"rofi-wayland"
+"hyprland"
+"hyprlock"
+"hyprcursor"
+"hyprpaper"
+"waybar"
+"go"
+"python3"
+"eza"
+"fzf"
+"ripgrep"
+"make"
+"mozilla-openh264"
+)
+
 # list of packages that failed to install
 failed=()
 
 # determine package manager
-read -rp "install packages with your package manager? (pacman/xbps/skip) " pm
+read -rp "install packages with your package manager? (pacman/xbps/zypper/skip) " pm
 
 # update repo and install packages
 case "$pm" in
@@ -57,6 +83,16 @@ case "$pm" in
             fi
         done
         ;;
+    "zypper")
+        sudo zypper refresh
+        sudo zypper dup
+        for i in "${opensuse_apps[@]}"; do
+            echo -e "\nAttempting to install $i ..."
+            sudo zypper install -y $i
+            if [ $? -ne 0 ]; then
+                failed=("${failed[@]}" "$i")
+            fi
+        done
     *)
         echo "skipping package installation"
 esac
@@ -88,6 +124,16 @@ else
     echo "skipping nerdfont"
 fi
 
+# install tmux package manager
+echo ""
+read -rp "install tmux package manager? [y/n]: " answer
+if [[ "$answer" =~ ^[Yy]$ ]]; then
+    cd $HOME
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+else
+    echo "skipping tmux package manager"
+fi
+
 # clone dotfiles repo and set them up
 echo ""
 read -rp "clone your dotfiles repo? [y/n]: " answer
@@ -113,5 +159,5 @@ else
 fi
 
 echo "#######################"
-echo "system install complete"
+echo "system setup complete"
 echo "#######################"
