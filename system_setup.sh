@@ -24,35 +24,55 @@ arch_apps=(
     "lazygit"
     "man-db"
     "man-pages"
+    "yazi"
+    "cups"
+    "system-config-printer"
 )
 
 # list of void packages
 void_apps=(
-    #list here
+    "git"
+    "github-cli"
+    "stow"
+    "firefox"
+    "keepassxc"
+    "kitty"
+    "neovim"
+    "tmux"
+    "eza"
+    "fzf"
+    "ripgrep"
+    "make"
+    "btop"
+    "unzip"
+    "lazygit"
+    "yazi"
+    "cups"
+    "avahi"
 )
 
 opensuse_apps=(
-"git"
-"stow"
-"firefox"
-"keepassxc"
-"kitty"
-"neovim"
-"tmux"
-"ranger"
-"rofi-wayland"
-"hyprland"
-"hyprlock"
-"hyprcursor"
-"hyprpaper"
-"waybar"
-"go"
-"python3"
-"eza"
-"fzf"
-"ripgrep"
-"make"
-"mozilla-openh264"
+    "git"
+    "stow"
+    "firefox"
+    "keepassxc"
+    "kitty"
+    "neovim"
+    "tmux"
+    "yazi"
+    "rofi-wayland"
+    "hyprland"
+    "hyprlock"
+    "hyprcursor"
+    "hyprpaper"
+    "waybar"
+    "go"
+    "python3"
+    "eza"
+    "fzf"
+    "ripgrep"
+    "make"
+    "mozilla-openh264"
 )
 
 # list of packages that failed to install
@@ -77,7 +97,7 @@ case "$pm" in
         sudo xbps-install -Su
         for i in "${void_apps[@]}"; do
             echo -e "\nattempting to install $i ..."
-            sudo xbps-install -S $i -y
+            sudo xbps-install $i -y
             if [ $? -ne 0 ]; then
                 failed=("${failed[@]}" "$i")
             fi
