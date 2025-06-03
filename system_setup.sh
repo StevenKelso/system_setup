@@ -119,12 +119,6 @@ case "$pm" in
 	;;
 esac
 
-# display list of failed installs
-echo -e "\nthese programs couldn't be installed through the package manager:"
-for i in "${failed[@]}"; do
-    echo -e "$i"
-done
-
 # install starship prompt
 echo ""
 read -rp "install starship prompt? [y/n]: " answer
@@ -179,6 +173,12 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
 else
     echo "skipping github workspace directory structure"
 fi
+
+# display list of failed installs
+echo -e "\nthese programs couldn't be installed through the package manager:"
+for i in "${failed[@]}"; do
+    echo -e "$i"
+done
 
 echo "#######################"
 echo "system setup complete"
