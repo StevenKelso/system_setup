@@ -113,8 +113,10 @@ case "$pm" in
                 failed=("${failed[@]}" "$i")
             fi
         done
+	;;
     *)
         echo "skipping package installation"
+	;;
 esac
 
 # display list of failed installs
