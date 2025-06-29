@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# list of arch packages
+#--- list of arch packages ---#
 arch_apps=(
     "git"
     "github-cli"
@@ -27,9 +27,24 @@ arch_apps=(
     "yazi"
     "cups"
     "system-config-printer"
+    "hplip"
+    "traceroute"
+    "mtr"
+    "nmap"
+    "bind" # the package that contains "dig and nslookup"
+    "gnu-netcat"
+    "gammastep"
+    "tcpdump"
+    "wireshark-qt"
+    "dunst"
+    "grim"
+    "slurp"
+    "rsync"
+    "fd"
 )
 
-# list of void packages
+
+#--- list of void packages ---#
 void_apps=(
     "git"
     "github-cli"
@@ -51,6 +66,8 @@ void_apps=(
     "avahi"
 )
 
+
+#--- list of opensuse packages ---#
 opensuse_apps=(
     "git"
     "stow"
@@ -75,13 +92,16 @@ opensuse_apps=(
     "mozilla-openh264"
 )
 
-# list of packages that failed to install
+
+#--- list of packages that failed to install ---#
 failed=()
 
-# determine package manager
+
+#--- determine package manager ---#
 read -rp "install packages with your package manager? (pacman/xbps/zypper/skip) " pm
 
-# update repo and install packages
+
+#--- update repo and install packages ---#
 case "$pm" in
     "pacman")
         sudo pacman -Syu
@@ -113,13 +133,14 @@ case "$pm" in
                 failed=("${failed[@]}" "$i")
             fi
         done
-	;;
+	    ;;
     *)
         echo "skipping package installation"
 	;;
 esac
 
-# install starship prompt
+
+#--- install starship prompt ---#
 echo ""
 read -rp "install starship prompt? [y/n]: " answer
 if [[ "$answer" =~ ^[Yy]$ ]]; then
@@ -128,7 +149,8 @@ else
     echo "skipping starship prompt"
 fi
 
-# install nerdfont
+
+#--- install nerdfont ---#
 echo ""
 read -rp "install nerdfont? [y/n]: " answer
 if [[ "$answer" =~ ^[Yy]$ ]]; then
@@ -140,7 +162,8 @@ else
     echo "skipping nerdfont"
 fi
 
-# install tmux package manager
+
+#--- install tmux package manager ---#
 echo ""
 read -rp "install tmux package manager? [y/n]: " answer
 if [[ "$answer" =~ ^[Yy]$ ]]; then
@@ -150,7 +173,8 @@ else
     echo "skipping tmux package manager"
 fi
 
-# clone dotfiles repo and set them up
+
+#--- clone dotfiles repo and set them up ---#
 echo ""
 read -rp "clone your dotfiles repo? [y/n]: " answer
 if [[ "$answer" =~ ^[Yy]$ ]]; then
@@ -164,7 +188,8 @@ else
     echo "skipping dotfiles"
 fi
 
-# create workspace directory
+
+#--- create workspace directory ---#
 echo ""
 read -rp "create github workspace directory structure? [y/n]: " answer
 if [[ "$answer" =~ ^[Yy]$ ]]; then
@@ -174,12 +199,14 @@ else
     echo "skipping github workspace directory structure"
 fi
 
-# display list of failed installs
+
+#--- display list of failed installs ---#
 echo -e "\nthese programs couldn't be installed through the package manager:"
 for i in "${failed[@]}"; do
     echo -e "$i"
 done
 
-echo "#######################"
+
+echo "#----------------------"
 echo "system setup complete"
-echo "#######################"
+echo "#----------------------"
