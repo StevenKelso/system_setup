@@ -41,6 +41,7 @@ arch_apps=(
     "slurp"
     "rsync"
     "fd"
+    "udiskie"
 )
 
 
