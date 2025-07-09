@@ -24,7 +24,6 @@ arch_apps=(
     "lazygit"
     "man-db"
     "man-pages"
-    "yazi"
     "cups"
     "system-config-printer"
     "hplip"
@@ -62,7 +61,6 @@ void_apps=(
     "btop"
     "unzip"
     "lazygit"
-    "yazi"
     "cups"
     "avahi"
 )
@@ -77,7 +75,6 @@ opensuse_apps=(
     "kitty"
     "neovim"
     "tmux"
-    "yazi"
     "rofi-wayland"
     "hyprland"
     "hyprlock"
