@@ -42,6 +42,11 @@ arch_apps=(
     "fd"
     "udiskie"
     "otf-firamono-nerd"
+    "python-pip"
+    "k9s"
+    "docker"
+    "virt-manager"
+    "qemu-full"
 )
 
 
@@ -124,6 +129,31 @@ echo "-------------------------------"
 source $HOME/.bashrc
 source $HOME/.tmux.conf
 
+#--- set up docker ---#
+echo ""
+echo -rp "set up docker? [y/n]:" answer
+echo "---------------------"
+if [[ "$answer" =~ ^[Yy]$ ]]; then
+    newgrp docker
+    sudo usermod -aG docker $USER
+    sudo systemctl start docker.service
+    sudo systemctl enable docker.service
+else
+    echo "skipping docker setup"
+fi
+
+#--- set up virtualization ---#
+echo ""
+echo -rp "set up virtualization? [y/n]:" answer
+echo "--------------------------"
+if [[ "$answer" =~ ^[Yy]$ ]]; then
+    newgrp libvirt
+    sudo usermod -aG libvirt $USER
+    sudo systemctl start libvirtd.service
+    sudo systemctl enable libvirtd.service
+else
+    echo "skipping virtualization setup"
+fi
 
 #--- display list of failed installs ---#
 echo ""
