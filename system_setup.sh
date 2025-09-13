@@ -46,6 +46,8 @@ arch_apps=(
     "hplip"
     "make"
     "unzip"
+    "jq"
+    "yq"
 )
 
 
