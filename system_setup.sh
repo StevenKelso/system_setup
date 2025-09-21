@@ -48,6 +48,8 @@ arch_apps=(
     "unzip"
     "jq"
     "yq"
+    "tldr"
+    "superfile"
 )
 
 
