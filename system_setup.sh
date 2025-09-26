@@ -7,6 +7,7 @@ arch_apps=(
     "btop"
     "bind" # package containing "dig and nslookup"
     "cups"
+    "discord"
     "docker"
     "dunst"
     "eza"
@@ -41,7 +42,6 @@ arch_apps=(
     "rsync"
     "slurp"
     "stow"
-    "superfile"
     "system-config-printer"
     "tcpdump"
     "tldr"
@@ -50,6 +50,7 @@ arch_apps=(
     "unzip"
     "virt-manager"
     "waybar"
+    "yazi"
     "yq"
 )
 
