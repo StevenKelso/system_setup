@@ -119,6 +119,7 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
         rm -rf $HOME/.config/hypr/
     fi
     stow .
+    source $HOME/.bashrc
 else
     echo "skipping dotfiles"
 fi
@@ -134,14 +135,6 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
 else
     echo "skipping github workspace directory structure"
 fi
-
-
-#--- source .bashrc and .tmux.conf ---#
-echo -e "\n#########################"
-echo "sourcing .bashrc and .tmux.conf"
-echo "-------------------------------"
-source $HOME/.bashrc
-source $HOME/.tmux.conf
 
 
 #--- set up docker ---#
