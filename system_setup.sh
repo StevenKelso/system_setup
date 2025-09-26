@@ -17,7 +17,6 @@ arch_apps=(
     "gammastep"
     "git"
     "github-cli"
-    "gnu-netcat"
     "grim"
     "hplip"
     "hyprland"
@@ -34,6 +33,7 @@ arch_apps=(
     "mtr"
     "neovim"
     "nmap"
+    "openbsd-netcat"
     "otf-firamono-nerd"
     "python-pip"
     "qemu-full"
@@ -60,8 +60,10 @@ failed=()
 
 
 #--- update repo and install packages ---#
+echo "###################################"
+echo "Welcome to the System Setup script!"
+echo "###################################"
 echo ""
-echo "#########################"
 read -rp "install packages? [y/n]: " answer
 echo "------------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
@@ -79,8 +81,7 @@ fi
 
 
 #--- install starship prompt ---#
-echo ""
-echo "#########################"
+echo -e "\n#########################"
 read -rp "install starship prompt? [y/n]: " answer
 echo "-------------------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
@@ -91,8 +92,7 @@ fi
 
 
 #--- install tmux package manager ---#
-echo ""
-echo "#########################"
+echo -e "\n#########################"
 read -rp "install tmux package manager? [y/n]: " answer
 echo "------------------------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
@@ -104,16 +104,20 @@ fi
 
 
 #--- clone dotfiles repo and set them up ---#
-echo ""
-echo "#########################"
+echo -e "\n#########################"
 read -rp "clone your dotfiles repo? [y/n]: " answer
 echo "--------------------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
     echo -e "\ncontinuing..."
     cd $HOME
-    rm $HOME/.bashrc
     git clone https://github.com/StevenKelso/dotfiles
     cd dotfiles
+    if [ -f $HOME/.bashrc ]; then
+        rm $HOME/.bashrc
+    fi
+    if [ -d $HOME/.config/hypr/ ]; then
+        rm -rf $HOME/.config/hypr/
+    fi
     stow .
 else
     echo "skipping dotfiles"
@@ -121,8 +125,7 @@ fi
 
 
 #--- create workspace directory ---#
-echo ""
-echo "#########################"
+echo -e "\n#########################"
 read -rp "create github workspace directory structure? [y/n]: " answer
 echo "---------------------------------------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
@@ -132,13 +135,14 @@ else
     echo "skipping github workspace directory structure"
 fi
 
+
 #--- source .bashrc and .tmux.conf ---#
-echo ""
-echo "#########################"
+echo -e "\n#########################"
 echo "sourcing .bashrc and .tmux.conf"
 echo "-------------------------------"
 source $HOME/.bashrc
 source $HOME/.tmux.conf
+
 
 #--- set up docker ---#
 echo ""
@@ -146,31 +150,29 @@ echo "#########################"
 echo -rp "set up docker? [y/n]:" answer
 echo "---------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
-    sudo newgrp docker
+    newgrp docker
     sudo usermod -aG docker $USER
-    sudo systemctl start docker.service
-    sudo systemctl enable docker.service
+    sudo systemctl enable --now docker.service
 else
     echo "skipping docker setup"
 fi
 
+
 #--- set up virtualization ---#
-echo ""
-echo "#########################"
+echo -e "\n#########################"
 echo -rp "set up virtualization? [y/n]:" answer
 echo "--------------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
-    sudo newgrp libvirt
+    newgrp libvirt
     sudo usermod -aG libvirt $USER
-    sudo systemctl start libvirtd.service
-    sudo systemctl enable libvirtd.service
+    sudo systemctl enable --now libvirtd.service
 else
     echo "skipping virtualization setup"
 fi
 
+
 #--- display list of failed installs ---#
-echo ""
-echo "#########################"
+echo -e "\n#########################"
 echo "these programs couldn't be installed through the package manager:"
 echo "-----------------------------------------------------------------"
 for i in "${failed[@]}"; do
@@ -178,7 +180,6 @@ for i in "${failed[@]}"; do
 done
 
 
-echo ""
-echo "#########################"
+echo -e "\n#########################"
 echo "# system setup complete #"
 echo "#########################"
