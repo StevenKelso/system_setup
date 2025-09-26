@@ -61,6 +61,7 @@ failed=()
 
 #--- update repo and install packages ---#
 echo ""
+echo "#########################"
 read -rp "install packages? [y/n]: " answer
 echo "------------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
@@ -79,6 +80,7 @@ fi
 
 #--- install starship prompt ---#
 echo ""
+echo "#########################"
 read -rp "install starship prompt? [y/n]: " answer
 echo "-------------------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
@@ -90,6 +92,7 @@ fi
 
 #--- install tmux package manager ---#
 echo ""
+echo "#########################"
 read -rp "install tmux package manager? [y/n]: " answer
 echo "------------------------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
@@ -102,6 +105,7 @@ fi
 
 #--- clone dotfiles repo and set them up ---#
 echo ""
+echo "#########################"
 read -rp "clone your dotfiles repo? [y/n]: " answer
 echo "--------------------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
@@ -118,6 +122,7 @@ fi
 
 #--- create workspace directory ---#
 echo ""
+echo "#########################"
 read -rp "create github workspace directory structure? [y/n]: " answer
 echo "---------------------------------------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
@@ -129,6 +134,7 @@ fi
 
 #--- source .bashrc and .tmux.conf ---#
 echo ""
+echo "#########################"
 echo "sourcing .bashrc and .tmux.conf"
 echo "-------------------------------"
 source $HOME/.bashrc
@@ -136,10 +142,11 @@ source $HOME/.tmux.conf
 
 #--- set up docker ---#
 echo ""
+echo "#########################"
 echo -rp "set up docker? [y/n]:" answer
 echo "---------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
-    newgrp docker
+    sudo newgrp docker
     sudo usermod -aG docker $USER
     sudo systemctl start docker.service
     sudo systemctl enable docker.service
@@ -149,10 +156,11 @@ fi
 
 #--- set up virtualization ---#
 echo ""
+echo "#########################"
 echo -rp "set up virtualization? [y/n]:" answer
 echo "--------------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
-    newgrp libvirt
+    sudo newgrp libvirt
     sudo usermod -aG libvirt $USER
     sudo systemctl start libvirtd.service
     sudo systemctl enable libvirtd.service
@@ -162,6 +170,7 @@ fi
 
 #--- display list of failed installs ---#
 echo ""
+echo "#########################"
 echo "these programs couldn't be installed through the package manager:"
 echo "-----------------------------------------------------------------"
 for i in "${failed[@]}"; do
