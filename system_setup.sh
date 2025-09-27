@@ -35,6 +35,7 @@ arch_apps=(
     "nmap"
     "openbsd-netcat"
     "otf-firamono-nerd"
+    "pamixer"
     "pipewire"
     "pipewire-pulse"
     "pipewire-alsa"
