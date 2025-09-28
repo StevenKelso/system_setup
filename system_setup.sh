@@ -6,6 +6,7 @@ arch_apps=(
     "bat"
     "btop"
     "bind" # package containing "dig and nslookup"
+    "brightnessctl"
     "cups"
     "discord"
     "docker"
