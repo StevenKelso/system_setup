@@ -37,6 +37,7 @@ arch_apps=(
     "openbsd-netcat"
     "otf-firamono-nerd"
     "pamixer"
+    "perl-image-exiftool"
     "pipewire"
     "pipewire-pulse"
     "pipewire-alsa"
@@ -55,6 +56,7 @@ arch_apps=(
     "unzip"
     "virt-manager"
     "waybar"
+    "wl-clipboard"
     "yazi"
     "yq"
 )
