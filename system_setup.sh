@@ -23,6 +23,7 @@ arch_apps=(
     "hyprland"
     "hyprlock"
     "hyprpaper"
+    "imagemagick"
     "jq"
     "k9s"
     "keepassxc"
