@@ -35,6 +35,8 @@ arch_apps=(
     "mtr"
     "neovim"
     "nmap"
+    "noto-fonts-cjk"
+    "noto-fonts-emoji"
     "openbsd-netcat"
     "otf-firamono-nerd"
     "pamixer"
