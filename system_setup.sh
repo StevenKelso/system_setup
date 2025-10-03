@@ -150,10 +150,9 @@ fi
 #--- set up docker ---#
 echo ""
 echo "#########################"
-echo -rp "set up docker? [y/n]:" answer
+read -rp "set up docker? [y/n]:" answer
 echo "---------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
-    newgrp docker
     sudo usermod -aG docker $USER
     sudo systemctl enable --now docker.service
 else
@@ -163,10 +162,9 @@ fi
 
 #--- set up virtualization ---#
 echo -e "\n#########################"
-echo -rp "set up virtualization? [y/n]:" answer
+read -rp "set up virtualization? [y/n]:" answer
 echo "--------------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
-    newgrp libvirt
     sudo usermod -aG libvirt $USER
     sudo systemctl enable --now libvirtd.service
 else
