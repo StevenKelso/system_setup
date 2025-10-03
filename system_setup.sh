@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#===================================#
+# Title: system_installer.sh        #
+# Author: StevenKelso               #
+#===================================#
+
 #--- list of arch packages ---#
 arch_apps=(
     "aws-cli-v2"
@@ -65,24 +70,23 @@ arch_apps=(
 )
 
 
-#--- list of packages that failed to install ---#
+# list of packages that failed to install
 failed=()
 
 
-#--- update repo and install packages ---#
-echo "###################################"
+# update repo and install packages
+echo "#=================================#"
 echo "Welcome to the System Setup script!"
-echo "###################################"
-echo ""
+echo -e "#=================================#\n"
 read -rp "install packages? [y/n]: " answer
 echo "------------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
-    sudo pacman -Syu
+    sudo pacman -Syu --noconfirm
     for i in "${arch_apps[@]}"; do
         echo -e "\nattempting to install $i ..."
-        sudo pacman -S --noconfirm $i
+        sudo pacman -S --noconfirm "$i"
         if [ $? -ne 0 ]; then
-            failed=("${failed[@]}" "$i")
+            failed+=("$i")
         fi
     done
 else
@@ -90,21 +94,21 @@ else
 fi
 
 
-#--- install starship prompt ---#
-echo -e "\n#########################"
+# install starship prompt
+echo -e "\n#=============================#"
 read -rp "install starship prompt? [y/n]: " answer
-echo "-------------------------------"
+echo "#=============================#"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
-    curl -sS https://starship.rs/install.sh | sh
+    curl -sS https://starship.rs/install.sh | sh -s -- -y
 else
     echo "skipping starship prompt"
 fi
 
 
-#--- install tmux package manager ---#
-echo -e "\n#########################"
+# install tmux package manager
+echo -e "\n#==================================#"
 read -rp "install tmux package manager? [y/n]: " answer
-echo "------------------------------------"
+echo "#==================================#"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
     cd $HOME
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
@@ -113,10 +117,10 @@ else
 fi
 
 
-#--- clone dotfiles repo and set them up ---#
-echo -e "\n#########################"
+# clone dotfiles repo and set them up
+echo -e "\n#==============================#"
 read -rp "clone your dotfiles repo? [y/n]: " answer
-echo "--------------------------------"
+echo "#==============================#"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
     echo -e "\ncontinuing..."
     cd $HOME
@@ -128,17 +132,20 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
     if [ -d $HOME/.config/hypr/ ]; then
         rm -rf $HOME/.config/hypr/
     fi
+    if [ -d $HOME/.config/kitty/ ]; then
+        rm -rf $HOME/.config/kitty/
+    fi
     stow .
-    source $HOME/.bashrc
+    echo "dotfiles applied. restart your shell to load new config"
 else
     echo "skipping dotfiles"
 fi
 
 
-#--- create workspace directory ---#
-echo -e "\n#########################"
+# create workspace directory
+echo -e "\n#=================================================#"
 read -rp "create github workspace directory structure? [y/n]: " answer
-echo "---------------------------------------------------"
+echo "#=================================================#"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
     cd $HOME
     mkdir -p workspace/github.com/stevenkelso/
@@ -147,11 +154,10 @@ else
 fi
 
 
-#--- set up docker ---#
-echo ""
-echo "#########################"
+# set up docker
+echo -e "\n#=======================#"
 read -rp "set up docker? [y/n]:" answer
-echo "---------------------"
+echo "#===================#"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
     sudo usermod -aG docker $USER
     sudo systemctl enable --now docker.service
@@ -160,10 +166,10 @@ else
 fi
 
 
-#--- set up virtualization ---#
-echo -e "\n#########################"
+# set up virtualization
+echo -e "\n#=======================#"
 read -rp "set up virtualization? [y/n]:" answer
-echo "--------------------------"
+echo "#========================#"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
     sudo usermod -aG libvirt $USER
     sudo systemctl enable --now libvirtd.service
@@ -172,15 +178,15 @@ else
 fi
 
 
-#--- display list of failed installs ---#
-echo -e "\n#########################"
+# display list of failed installs
+echo -e "\n#===============================================================#"
 echo "these programs couldn't be installed through the package manager:"
-echo "-----------------------------------------------------------------"
+echo "#===============================================================#"
 for i in "${failed[@]}"; do
     echo -e "$i"
 done
 
 
-echo -e "\n#########################"
+echo -e "\n#=======================#"
 echo "# system setup complete #"
-echo "#########################"
+echo "#=======================#"
