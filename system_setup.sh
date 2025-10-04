@@ -67,6 +67,8 @@ arch_apps=(
     "wl-clipboard"
     "yazi"
     "yq"
+    "zathura"
+    "zathura-ps"
 )
 
 
