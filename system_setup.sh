@@ -68,7 +68,7 @@ arch_apps=(
     "yazi"
     "yq"
     "zathura"
-    "zathura-ps"
+    "zathura-pdf-poppler"
 )
 
 
