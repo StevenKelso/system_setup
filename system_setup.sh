@@ -147,15 +147,24 @@ else
 fi
 
 
-# create workspace directory
-echo -e "\n#=================================================#"
-read -rp "create github workspace directory structure? [y/n]: " answer
-echo "#=================================================#"
+# create directories
+echo -e "\n#==========================#"
+read -rp "create directories? [y/n]: " answer
+echo "#============================#"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
     cd $HOME
     mkdir -p workspace/github.com/stevenkelso/
+    if [ ! -d "$HOME/Pictures" ]; then
+        mkdir -p "$HOME/Pictures"
+    fi
+    if [ ! -d "$HOME/Downloads" ]; then
+        mkdir -p "$HOME/Downloads"
+    fi
+    if [ ! -d "$HOME/Documents" ]; then
+        mkdir -p "$HOME/Documents"
+    fi
 else
-    echo "skipping github workspace directory structure"
+    echo "skipping creation of directories"
 fi
 
 
