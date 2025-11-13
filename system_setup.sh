@@ -61,7 +61,6 @@ arch_apps=(
     "system-config-printer"
     "tcpdump"
     "tldr"
-    "tmux"
     "udiskie"
     "unzip"
     "virt-manager"
@@ -107,18 +106,6 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
     curl -sS https://starship.rs/install.sh | sh -s -- -y
 else
     echo "skipping starship prompt"
-fi
-
-
-# install tmux package manager
-echo -e "\n#==================================#"
-read -rp "install tmux package manager? [y/n]: " answer
-echo "#==================================#"
-if [[ "$answer" =~ ^[Yy]$ ]]; then
-    cd $HOME
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-else
-    echo "skipping tmux package manager"
 fi
 
 
