@@ -7,7 +7,6 @@
 
 #--- list of arch packages ---#
 arch_apps=(
-    "aws-cli-v2"
     "bat"
     "btop"
     "bind" # package containing "dig and nslookup"
@@ -30,11 +29,8 @@ arch_apps=(
     "hyprlock"
     "hyprpaper"
     "imagemagick"
-    "jq"
-    "k9s"
     "keepassxc"
     "kitty"
-    "lazygit"
     "make"
     "man-db"
     "man-pages"
@@ -61,14 +57,15 @@ arch_apps=(
     "system-config-printer"
     "tcpdump"
     "tldr"
+    "traceroute"
     "udiskie"
     "unzip"
     "virt-manager"
     "waybar"
     "wireplumber"
+    "wireshark-qt"
     "wl-clipboard"
     "yazi"
-    "yq"
     "zathura"
     "zathura-pdf-poppler"
 )
