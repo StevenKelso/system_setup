@@ -7,13 +7,12 @@
 
 #--- list of arch packages ---#
 arch_apps=(
+    "aws-cli-v2"
     "bat"
     "btop"
     "bind" # package containing "dig and nslookup"
     "brightnessctl"
-    "cups"
     "discord"
-    "docker"
     "dunst"
     "eza"
     "fd"
@@ -24,7 +23,6 @@ arch_apps=(
     "git"
     "github-cli"
     "grim"
-    "hplip"
     "hyprland"
     "hyprlock"
     "hyprpaper"
@@ -47,20 +45,17 @@ arch_apps=(
     "pipewire-pulse"
     "pipewire-alsa"
     "python-pip"
-    "qemu-full"
     "remmina"
     "ripgrep"
     "rofi"
     "rsync"
     "slurp"
     "stow"
-    "system-config-printer"
     "tcpdump"
     "tldr"
     "traceroute"
     "udiskie"
     "unzip"
-    "virt-manager"
     "waybar"
     "wireplumber"
     "wireshark-qt"
@@ -82,7 +77,6 @@ echo -e "#=================================#\n"
 read -rp "install packages? [y/n]: " answer
 echo "------------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
-    sudo pacman -Syu --noconfirm
     for i in "${arch_apps[@]}"; do
         echo -e "\nattempting to install $i ..."
         sudo pacman -S --noconfirm "$i"
@@ -153,10 +147,20 @@ fi
 
 
 # set up docker
+docker_apps=(
+    "docker"
+)
 echo -e "\n#=======================#"
 read -rp "set up docker? [y/n]:" answer
 echo "#===================#"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
+    for i in "${docker_apps[@]}"; do
+        echo -e "\nattempting to install $i ..."
+        sudo pacman -S --noconfirm "$i"
+        if [ $? -ne 0 ]; then
+            failed+=("$i")
+        fi
+    done
     sudo usermod -aG docker $USER
     sudo systemctl enable --now docker.service
 else
@@ -165,14 +169,49 @@ fi
 
 
 # set up virtualization
+virt_apps=(
+    "qemu-full"
+    "virt-manager"
+)
 echo -e "\n#=======================#"
 read -rp "set up virtualization? [y/n]:" answer
 echo "#========================#"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
+    for i in "${virt_apps[@]}"; do
+        echo -e "\nattempting to install $i ..."
+        sudo pacman -S --noconfirm "$i"
+        if [ $? -ne 0 ]; then
+            failed+=("$i")
+        fi
+    done
     sudo usermod -aG libvirt $USER
     sudo systemctl enable --now libvirtd.service
 else
     echo "skipping virtualization setup"
+fi
+
+
+# set up printing
+print_apps=(
+    "cups"
+    "hplip"
+    "python-pyqt5"
+    "system-config-printer"
+)
+echo -e "\n#=====================#"
+read -rp "set up printing? [y/n]:" answer
+echo "#======================#"
+if [[ "$answer" =~ ^[Yy]$ ]]; then
+    for i in "${print_apps[@]}"; do
+        echo -e "\nattempting to install $i ..."
+        sudo pacman -S --noconfirm "$i"
+        if [ $? -ne 0 ]; then
+            failed+=("$i")
+        fi
+    done
+    sudo systemctl enable --now cups.service
+else
+    echo "skipping printing setup"
 fi
 
 
