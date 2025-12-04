@@ -26,6 +26,7 @@ arch_apps=(
     "hyprland"
     "hyprlock"
     "hyprpaper"
+    "jq"
     "imagemagick"
     "keepassxc"
     "kitty"
@@ -61,6 +62,7 @@ arch_apps=(
     "wireshark-qt"
     "wl-clipboard"
     "yazi"
+    "yq"
     "zathura"
     "zathura-pdf-poppler"
 )
@@ -122,6 +124,43 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
     echo "dotfiles applied. restart your shell to load new config"
 else
     echo "skipping dotfiles"
+fi
+
+
+# set up yay
+echo -e "\n#==============================#"
+read -rp "clone your dotfiles repo? [y/n]: " answer
+echo "#==============================#"
+if [[ "$answer" =~ ^[Yy]$ ]]; then
+    echo -e "\ncontinuing..."
+    cd $HOME
+    sudo pacman -S --needed git base-devel
+    git clone https://aur.archlinux.org/yay.git
+    cd yay
+    makepkg -si
+    yay -Y --gendb
+
+    # set up brave browser
+    echo -e "\n#=============================#"
+    read -rp "install brave browser? [y/n]: " answer
+    echo "#=============================#"
+    if [[ "$answer" =~ ^[Yy]$ ]]; then
+        yay -Sy brave-bin
+    else
+        echo "skipping brave browser"
+    fi
+
+    # set up vscodium
+    echo -e "\n#=========================#"
+    read -rp "install vscodium? [y/n]: " answer
+    echo "#=========================#"
+    if [[ "$answer" =~ ^[Yy]$ ]]; then
+        yay -S vscodium-bin
+    else
+        echo "skipping vscodium"
+    fi
+else
+    echo "skipping yay setup"
 fi
 
 
