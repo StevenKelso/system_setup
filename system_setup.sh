@@ -79,6 +79,7 @@ echo -e "#=================================#\n"
 read -rp "install packages? [y/n]: " answer
 echo "------------------------"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
+    sudo pacman -Syu --noconfirm
     for i in "${arch_apps[@]}"; do
         echo -e "\nattempting to install $i ..."
         sudo pacman -S --noconfirm "$i"
@@ -129,7 +130,7 @@ fi
 
 # set up yay
 echo -e "\n#==============================#"
-read -rp "clone your dotfiles repo? [y/n]: " answer
+read -rp "set up yay AUR helper? [y/n]: " answer
 echo "#==============================#"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
     echo -e "\ncontinuing..."
@@ -190,7 +191,7 @@ docker_apps=(
     "docker"
 )
 echo -e "\n#=======================#"
-read -rp "set up docker? [y/n]:" answer
+read -rp "set up docker? [y/n]: " answer
 echo "#===================#"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
     for i in "${docker_apps[@]}"; do
@@ -213,7 +214,7 @@ virt_apps=(
     "virt-manager"
 )
 echo -e "\n#=======================#"
-read -rp "set up virtualization? [y/n]:" answer
+read -rp "set up virtualization? [y/n]: " answer
 echo "#========================#"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
     for i in "${virt_apps[@]}"; do
@@ -238,7 +239,7 @@ print_apps=(
     "system-config-printer"
 )
 echo -e "\n#=====================#"
-read -rp "set up printing? [y/n]:" answer
+read -rp "set up printing? [y/n]: " answer
 echo "#======================#"
 if [[ "$answer" =~ ^[Yy]$ ]]; then
     for i in "${print_apps[@]}"; do
@@ -251,6 +252,20 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
     sudo systemctl enable --now cups.service
 else
     echo "skipping printing setup"
+fi
+
+
+# set up additional user
+echo -e "\n#==========================#"
+read -rp "set up additional user? [y/n]: " answer
+echo "#===========================#"
+if [[ "$answer" =~ ^[Yy]$ ]]; then
+    read -rp "enter username for new user" name
+    sudo useradd -m -G wheel -s /bin/bash $name
+    sudo passwd $name
+    echo "Remember to edit the sudoers file later"
+else
+    echo "skipping additional user setup"
 fi
 
 
