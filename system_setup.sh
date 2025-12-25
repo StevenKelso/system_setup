@@ -59,7 +59,6 @@ arch_apps=(
     "unzip"
     "waybar"
     "wireplumber"
-    "wireshark-qt"
     "wl-clipboard"
     "yazi"
     "yq"
@@ -67,36 +66,52 @@ arch_apps=(
     "zathura-pdf-poppler"
 )
 
+docker_apps=("docker")
 
-# list of packages that failed to install
-failed=()
+virt_apps=("qemu-full" "virt-manager")
+
+print_apps=("cups" "hplip" "python-pyqt5" "system-config-printer")
+
+failed_apps=()
+
+
+# confirm helper
+confirm() {
+    echo -e "\n#======================================#"
+    read -rp "$1 [y/n]: " answer
+    [[ "$answer" =~ ^[Yy]$ ]]
+}
+
+
+# pacman install helper
+install_pacman_packages() {
+    local pkgs=("$@")
+    for pkg in "${pkgs[@]}"; do
+        echo -e "\nattempting to install $pkg ..."
+        if ! sudo pacman -S --needed --noconfirm "$pkg"; then
+            failed_apps+=("$pkg")
+        fi
+    done
+}
+
+
+# welcome text
+echo "#=================================#"
+echo "Welcome to the System Setup script!"
+echo "#=================================#"
 
 
 # update repo and install packages
-echo "#=================================#"
-echo "Welcome to the System Setup script!"
-echo -e "#=================================#\n"
-read -rp "install packages? [y/n]: " answer
-echo "------------------------"
-if [[ "$answer" =~ ^[Yy]$ ]]; then
+if confirm "update repo and install packages?"; then
     sudo pacman -Syu --noconfirm
-    for i in "${arch_apps[@]}"; do
-        echo -e "\nattempting to install $i ..."
-        sudo pacman -S --noconfirm "$i"
-        if [ $? -ne 0 ]; then
-            failed+=("$i")
-        fi
-    done
+    install_pacman_packages "${arch_apps[@]}"
 else
     echo "skipping package install"
 fi
 
 
 # install starship prompt
-echo -e "\n#=============================#"
-read -rp "install starship prompt? [y/n]: " answer
-echo "#=============================#"
-if [[ "$answer" =~ ^[Yy]$ ]]; then
+if confirm "install starship prompt?"; then
     curl -sS https://starship.rs/install.sh | sh -s -- -y
 else
     echo "skipping starship prompt"
@@ -104,37 +119,30 @@ fi
 
 
 # clone dotfiles repo and set them up
-echo -e "\n#==============================#"
-read -rp "clone your dotfiles repo? [y/n]: " answer
-echo "#==============================#"
-if [[ "$answer" =~ ^[Yy]$ ]]; then
-    echo -e "\ncontinuing..."
-    cd $HOME
+if confirm "clone your dotfiles repo?"; then
+    cd "$HOME"
     git clone https://github.com/StevenKelso/dotfiles
     cd dotfiles
-    if [ -f $HOME/.bashrc ]; then
-        rm $HOME/.bashrc
+    if [ -f "$HOME/.bashrc" ]; then
+        rm "$HOME/.bashrc"
     fi
-    if [ -d $HOME/.config/hypr/ ]; then
-        rm -rf $HOME/.config/hypr/
+    if [ -d "$HOME/.config/hypr/" ]; then
+        rm -rf "$HOME/.config/hypr/"
     fi
-    if [ -d $HOME/.config/kitty/ ]; then
-        rm -rf $HOME/.config/kitty/
+    if [ -d "$HOME/.config/kitty/" ]; then
+        rm -rf "$HOME/.config/kitty/"
     fi
     stow .
-    echo "dotfiles applied. restart your shell to load new config"
+    echo "dotfiles applied, restart your shell to load new config"
 else
     echo "skipping dotfiles"
 fi
 
 
-# set up yay
-echo -e "\n#==============================#"
-read -rp "set up yay AUR helper? [y/n]: " answer
-echo "#==============================#"
-if [[ "$answer" =~ ^[Yy]$ ]]; then
+# set up yay AUR helper
+if confirm "set up yay AUR helper?"; then
     echo -e "\ncontinuing..."
-    cd $HOME
+    cd "$HOME"
     sudo pacman -S --needed git base-devel
     git clone https://aur.archlinux.org/yay.git
     cd yay
@@ -142,21 +150,15 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
     yay -Y --gendb
 
     # set up brave browser
-    echo -e "\n#=============================#"
-    read -rp "install brave browser? [y/n]: " answer
-    echo "#=============================#"
-    if [[ "$answer" =~ ^[Yy]$ ]]; then
-        yay -Sy brave-bin
+    if confirm "install brave browser?"; then
+        yay -S --needed brave-bin
     else
         echo "skipping brave browser"
     fi
 
     # set up vscodium
-    echo -e "\n#=========================#"
-    read -rp "install vscodium? [y/n]: " answer
-    echo "#=========================#"
-    if [[ "$answer" =~ ^[Yy]$ ]]; then
-        yay -S vscodium-bin
+    if confirm "install vscodium?"; then
+        yay -S --needed vscodium-bin
     else
         echo "skipping vscodium"
     fi
@@ -166,42 +168,18 @@ fi
 
 
 # create directories
-echo -e "\n#==========================#"
-read -rp "create directories? [y/n]: " answer
-echo "#============================#"
-if [[ "$answer" =~ ^[Yy]$ ]]; then
-    cd $HOME
-    mkdir -p workspace/github.com/stevenkelso/
-    if [ ! -d "$HOME/Pictures" ]; then
-        mkdir -p "$HOME/Pictures"
-    fi
-    if [ ! -d "$HOME/Downloads" ]; then
-        mkdir -p "$HOME/Downloads"
-    fi
-    if [ ! -d "$HOME/Documents" ]; then
-        mkdir -p "$HOME/Documents"
-    fi
+if confirm "create directories?"; then
+    cd "$HOME"
+    mkdir -p "$HOME"/{Pictures,Downloads,Documents}
 else
     echo "skipping creation of directories"
 fi
 
 
 # set up docker
-docker_apps=(
-    "docker"
-)
-echo -e "\n#=======================#"
-read -rp "set up docker? [y/n]: " answer
-echo "#===================#"
-if [[ "$answer" =~ ^[Yy]$ ]]; then
-    for i in "${docker_apps[@]}"; do
-        echo -e "\nattempting to install $i ..."
-        sudo pacman -S --noconfirm "$i"
-        if [ $? -ne 0 ]; then
-            failed+=("$i")
-        fi
-    done
-    sudo usermod -aG docker $USER
+if confirm "set up docker?"; then
+    install_pacman_packages "${docker_apps[@]}"
+    sudo usermod -aG docker "$USER"
     sudo systemctl enable --now docker.service
 else
     echo "skipping docker setup"
@@ -209,22 +187,9 @@ fi
 
 
 # set up virtualization
-virt_apps=(
-    "qemu-full"
-    "virt-manager"
-)
-echo -e "\n#=======================#"
-read -rp "set up virtualization? [y/n]: " answer
-echo "#========================#"
-if [[ "$answer" =~ ^[Yy]$ ]]; then
-    for i in "${virt_apps[@]}"; do
-        echo -e "\nattempting to install $i ..."
-        sudo pacman -S --noconfirm "$i"
-        if [ $? -ne 0 ]; then
-            failed+=("$i")
-        fi
-    done
-    sudo usermod -aG libvirt $USER
+if confirm "set up virtualization?"; then
+    install_pacman_packages "${virt_apps[@]}"
+    sudo usermod -aG libvirt "$USER"
     sudo systemctl enable --now libvirtd.service
 else
     echo "skipping virtualization setup"
@@ -232,50 +197,27 @@ fi
 
 
 # set up printing
-print_apps=(
-    "cups"
-    "hplip"
-    "python-pyqt5"
-    "system-config-printer"
-)
-echo -e "\n#=====================#"
-read -rp "set up printing? [y/n]: " answer
-echo "#======================#"
-if [[ "$answer" =~ ^[Yy]$ ]]; then
-    for i in "${print_apps[@]}"; do
-        echo -e "\nattempting to install $i ..."
-        sudo pacman -S --noconfirm "$i"
-        if [ $? -ne 0 ]; then
-            failed+=("$i")
-        fi
-    done
+if confirm "set up printing?"; then
+    install_pacman_packages "${print_apps[@]}"
     sudo systemctl enable --now cups.service
 else
     echo "skipping printing setup"
 fi
 
 
-# set up additional user
-echo -e "\n#==========================#"
-read -rp "set up additional user? [y/n]: " answer
-echo "#===========================#"
-if [[ "$answer" =~ ^[Yy]$ ]]; then
-    read -rp "enter username for new user" name
-    sudo useradd -m -G wheel -s /bin/bash $name
-    sudo passwd $name
-    echo "Remember to edit the sudoers file later"
-else
-    echo "skipping additional user setup"
-fi
-
-
 # display list of failed installs
-echo -e "\n#===============================================================#"
-echo "these programs couldn't be installed through the package manager:"
-echo "#===============================================================#"
-for i in "${failed[@]}"; do
-    echo -e "$i"
-done
+if (( ${#failed_apps[@]} > 0 )); then
+    echo -e "\n========================================="
+    echo "The following packages failed to install:"
+    echo "========================================="
+    for i in "${failed_apps[@]}"; do
+        echo -e "$i"
+    done
+else
+    echo -e "\n============================================"
+    echo "All selected packages installed successfully"
+    echo "============================================"
+fi
 
 
 echo -e "\n#=======================#"
