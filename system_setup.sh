@@ -118,8 +118,13 @@ else
 fi
 
 
+# set up directories
+cd "$HOME"
+mkdir -p "$HOME"/{Pictures,Downloads,Documents,trad}
+
+
 # clone dotfiles repo and set them up
-if confirm "clone your dotfiles repo?"; then
+if confirm "clone your dotfiles repo and set up directories?"; then
     cd "$HOME"
     git clone https://github.com/StevenKelso/dotfiles
     cd dotfiles
@@ -132,7 +137,7 @@ if confirm "clone your dotfiles repo?"; then
     if [ -d "$HOME/.config/kitty/" ]; then
         rm -rf "$HOME/.config/kitty/"
     fi
-    stow .
+    stow -t "$HOME" .
     echo "dotfiles applied, restart your shell to load new config"
 else
     echo "skipping dotfiles"
@@ -164,15 +169,6 @@ if confirm "set up yay AUR helper?"; then
     fi
 else
     echo "skipping yay setup"
-fi
-
-
-# create directories
-if confirm "create directories?"; then
-    cd "$HOME"
-    mkdir -p "$HOME"/{Pictures,Downloads,Documents}
-else
-    echo "skipping creation of directories"
 fi
 
 
