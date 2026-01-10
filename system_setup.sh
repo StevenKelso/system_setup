@@ -9,7 +9,6 @@
 arch_apps=(
     "aws-cli-v2"
     "bat"
-    "btop"
     "bind" # package containing "dig and nslookup"
     "brightnessctl"
     "discord"
@@ -18,6 +17,7 @@ arch_apps=(
     "fd"
     "firefox"
     "freerdp"
+    "fuse2"
     "fzf"
     "gammastep"
     "git"
@@ -120,7 +120,7 @@ fi
 
 # set up directories
 cd "$HOME"
-mkdir -p "$HOME"/{Pictures,Downloads,Documents,trad}
+mkdir -p "$HOME"/{Pictures,Downloads,Documents,work}
 
 
 # clone dotfiles repo and set them up
