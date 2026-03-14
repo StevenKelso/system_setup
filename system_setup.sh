@@ -7,10 +7,10 @@
 
 #--- list of arch packages ---#
 arch_apps=(
-    "aws-cli-v2"
     "bat"
     "bind" # package containing "dig and nslookup"
     "brightnessctl"
+    "cloc"
     "discord"
     "dunst"
     "eza"
@@ -19,13 +19,14 @@ arch_apps=(
     "freerdp"
     "fuse2"
     "fzf"
-    "gammastep"
     "git"
     "github-cli"
-    "grim"
+    "hypridle"
     "hyprland"
     "hyprlock"
     "hyprpaper"
+    "hyprshot"
+    "hyprsunset"
     "jq"
     "imagemagick"
     "keepassxc"
@@ -45,32 +46,29 @@ arch_apps=(
     "pipewire"
     "pipewire-pulse"
     "pipewire-alsa"
-    "python-pip"
     "remmina"
     "ripgrep"
     "rofi"
-    "rsync"
-    "slurp"
+    "rust"
+    "satty"
     "stow"
     "tcpdump"
     "tldr"
     "traceroute"
     "udiskie"
     "unzip"
+    "uv"
     "waybar"
     "wireplumber"
+    "wireshark-qt"
     "wl-clipboard"
     "yazi"
     "yq"
-    "zathura"
-    "zathura-pdf-poppler"
 )
 
 docker_apps=("docker")
 
 virt_apps=("qemu-full" "virt-manager")
-
-print_apps=("cups" "hplip" "python-pyqt5" "system-config-printer")
 
 failed_apps=()
 
@@ -120,7 +118,7 @@ fi
 
 # set up directories
 cd "$HOME"
-mkdir -p "$HOME"/{Pictures,Downloads,Documents,work}
+mkdir -p "$HOME"/{Pictures,Downloads,Documents,stevenkelso}
 
 
 # clone dotfiles repo and set them up
@@ -189,15 +187,6 @@ if confirm "set up virtualization?"; then
     sudo systemctl enable --now libvirtd.service
 else
     echo "skipping virtualization setup"
-fi
-
-
-# set up printing
-if confirm "set up printing?"; then
-    install_pacman_packages "${print_apps[@]}"
-    sudo systemctl enable --now cups.service
-else
-    echo "skipping printing setup"
 fi
 
 
