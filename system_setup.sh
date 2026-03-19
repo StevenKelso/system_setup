@@ -11,7 +11,6 @@ arch_apps=(
     "bind" # package containing "dig and nslookup"
     "brightnessctl"
     "cloc"
-    "discord"
     "dunst"
     "eza"
     "fd"
@@ -38,7 +37,6 @@ arch_apps=(
     "neovim"
     "nmap"
     "noto-fonts-cjk"
-    "noto-fonts-emoji"
     "openbsd-netcat"
     "otf-firamono-nerd"
     "pavucontrol"
@@ -63,7 +61,6 @@ arch_apps=(
     "wireshark-qt"
     "wl-clipboard"
     "yazi"
-    "yq"
 )
 
 docker_apps=("docker")
@@ -142,31 +139,23 @@ else
 fi
 
 
-# set up yay AUR helper
-if confirm "set up yay AUR helper?"; then
+# set up the paru AUR helper
+if confirm "set up the paru AUR helper?"; then
     echo -e "\ncontinuing..."
     cd "$HOME"
     sudo pacman -S --needed git base-devel
-    git clone https://aur.archlinux.org/yay.git
-    cd yay
+    git clone https://aur.archlinux.org/paru.git
+    cd paru
     makepkg -si
-    yay -Y --gendb
-
-    # set up brave browser
-    if confirm "install brave browser?"; then
-        yay -S --needed brave-bin
-    else
-        echo "skipping brave browser"
-    fi
 
     # set up vscodium
     if confirm "install vscodium?"; then
-        yay -S --needed vscodium-bin
+        paru -S vscodium-bin
     else
         echo "skipping vscodium"
     fi
 else
-    echo "skipping yay setup"
+    echo "skipping paru setup"
 fi
 
 
