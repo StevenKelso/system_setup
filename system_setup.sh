@@ -37,6 +37,7 @@ arch_apps=(
     "neovim"
     "nmap"
     "noto-fonts-cjk"
+    "noto-fonts-emoji"
     "openbsd-netcat"
     "otf-firamono-nerd"
     "pavucontrol"
@@ -115,14 +116,14 @@ fi
 
 # set up directories
 cd "$HOME"
-mkdir -p "$HOME"/{Pictures,Downloads,Documents,stevenkelso}
+mkdir -p "$HOME"/{Pictures,Downloads,Documents,github/stevenkelso}
 
 
 # clone dotfiles repo and set them up
 if confirm "clone your dotfiles repo and set up directories?"; then
-    cd "$HOME"
+    cd "$HOME"/github/stevenkelso
     git clone https://github.com/StevenKelso/dotfiles
-    cd dotfiles
+    cd "$HOME"/github/stevenkelso/dotfiles
     if [ -f "$HOME/.bashrc" ]; then
         rm "$HOME/.bashrc"
     fi
