@@ -40,12 +40,6 @@ case "$DISTRO" in
     arch)
         source "$SCRIPT_DIR/distros/arch.sh"
         ;;
-    # artix)
-        # source "$SCRIPT_DIR/distros/artix.sh"
-        # ;;
-    # void)
-    #     source "$SCRIPT_DIR/distros/void.sh"
-    #     ;;
     *)
         echo "Error: Unsupported distro: '$DISTRO'"
         echo "Supported distros: ${SUPPORTED_DISTROS[*]}"
