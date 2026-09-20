@@ -42,6 +42,7 @@ pkgs=(
     "rofi"
     "satty"
     "slurp"
+    "starship"
     "stow"
     "swayidle"
     "swaylock"
@@ -144,15 +145,6 @@ if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
     fi
 else
     echo "Skipping AUR helper"
-fi
-
-
-echo -e "\nInstall starship prompt? "
-read -rp "[y/n]: " answer
-if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
-    curl -sS https://starship.rs/install.sh | sh -s -- -y
-else
-    echo "Skipping starship prompt."
 fi
 
 
