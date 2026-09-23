@@ -6,6 +6,7 @@ pkgs=(
     "brightnessctl"
     "fuse2"
     "fuse3"
+    "ly"
     "man-db"
     "man-pages"
     "noto-fonts-cjk"
@@ -90,6 +91,8 @@ if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
             failed_pkgs+=("$pkg")
         fi
     done
+    sudo systemctl enable ly@tty1.service
+    sudo systemctl disable getty@tty1.service
 
     echo -e "\nInstall graphics packages? "
     read -rp "[amd/intel/nvidia/none]: " gpu_answer
