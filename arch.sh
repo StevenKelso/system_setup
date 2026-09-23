@@ -1,62 +1,73 @@
 #!/bin/bash
 
 pkgs=(
-    "argparse"
+    # -- system --
     "awww"
-    "bat"
-    "bind"
     "brightnessctl"
-    "eza"
-    "fd"
     "fuse2"
     "fuse3"
-    "fzf"
-    "git"
-    "go"
-    "grim"
-    "imagemagick"
-    "imv"
-    "ironbar"
-    "jq"
-    "keepassxc"
-    "kitty"
-    "luarocks"
-    "make"
-    "mako"
     "man-db"
     "man-pages"
-    "mtr"
-    "neovim"
-    "niri"
     "noto-fonts-cjk"
     "noto-fonts-emoji"
-    "npm"
-    "openbsd-netcat"
+    "ttf-iosevka-nerd"
+    "udiskie"
+    "unzip"
+    "wl-clipboard"
+    "xwayland-satellite"
+
+    # -- media --
+    "imagemagick"
+    "imv"
     "pavucontrol"
     "perl-image-exiftool"
     "pipewire"
     "pipewire-alsa"
     "pipewire-pulse"
+    "wireplumber"
+
+    # -- networking --
+    "bind"
+    "mtr"
+    "openbsd-netcat"
+
+    # -- programming / dependencies --
+    "argparse"
+    "git"
+    "go"
+    "jq"
+    "luarocks"
+    "make"
+    "npm"
     "python"
+    "tree-sitter-cli"
+
+    # -- workflow --
+    "bat"
+    "eza"
+    "fd"
+    "fzf"
+    "grim"
+    "ironbar"
+    "mako"
+    "neovim"
+    "niri"
+    "keepassxc"
+    "kitty"
     "ripgrep"
     "rofi"
     "satty"
     "slurp"
-    "starship"
-    "stow"
     "swayidle"
     "swaylock"
+    "starship"
+    "stow"
     "tldr"
-    "ttf-iosevka-nerd"
-    "tree-sitter-cli"
-    "udiskie"
-    "unzip"
-    "wireplumber"
-    "wl-clipboard"
     "wlsunset"
-    "xwayland-satellite"
-    "yazi"
 )
+amd_pkgs=("mesa" "vulkan-radeon" "xf86-video-amdgpu" "xf86-video-ati")
+intel_pkgs=("mesa" "vulkan-intel" "intel-media-driver" "libva-intel-driver")
+nvidia_pkgs=("dkms" "libva-nvidia-driver" "nvidia-open-dkms")
 docker_pkgs=("docker")
 virt_pkgs=("dnsmasq" "qemu-full" "virt-manager")
 aur_pkgs=("brave-bin")
@@ -79,6 +90,38 @@ if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
             failed_pkgs+=("$pkg")
         fi
     done
+
+    echo -e "\nInstall graphics packages? "
+    read -rp "[amd/intel/nvidia/none]: " gpu_answer
+    case "$gpu_answer" in
+        amd)
+            for pkg in "${amd_pkgs[@]}"; do
+                echo -e "\nAttempting to install: $pkg ..."
+                if ! sudo pacman -S --noconfirm "$pkg"; then
+                    failed_pkgs+=("$pkg")
+                fi
+            done
+            ;;
+        intel)
+            for pkg in "${intel_pkgs[@]}"; do
+                echo -e "\nAttempting to install: $pkg ..."
+                if ! sudo pacman -S --noconfirm "$pkg"; then
+                    failed_pkgs+=("$pkg")
+                fi
+            done
+            ;;
+        nvidia)
+            for pkg in "${nvidia_pkgs[@]}"; do
+                echo -e "\nAttempting to install: $pkg ..."
+                if ! sudo pacman -S --noconfirm "$pkg"; then
+                    failed_pkgs+=("$pkg")
+                fi
+            done
+            ;;
+        *)
+            echo "Skipping graphics packages."
+            ;;
+    esac
 else
     echo "Skipping standard packages"
 fi
