@@ -3,6 +3,7 @@
 pkgs=(
     # -- system --
     "awww"
+    "base-devel"
     "brightnessctl"
     "emptty"
     "fuse2"
